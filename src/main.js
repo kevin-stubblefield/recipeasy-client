@@ -1,8 +1,26 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import App from './App.vue';
+import VueRouter from 'vue-router';
+import store from './store';
 
-Vue.config.productionTip = false
+import Recipes from './components/Recipes.vue';
+import RecipeDetails from './components/RecipeDetails.vue';
+
+Vue.use(VueRouter);
+
+const routes = [
+  { name: 'recipes', path: '/', component: Recipes },
+  { name: 'recipeDetails', path: '/:id', component: RecipeDetails },
+];
+
+const router = new VueRouter({
+  routes
+});
+
+Vue.config.productionTip = false;
 
 new Vue({
+  store,
   render: h => h(App),
-}).$mount('#app')
+  router
+}).$mount('#app');

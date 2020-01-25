@@ -1,28 +1,46 @@
 <template>
     <section id="recipes">
-        <article v-for="recipe in recipes" :key="recipe.id">
-            <a :href="'http://localhost:3000/' + recipe.id">{{ recipe.name }}</a>
+        <input type="text" v-model="query" placeholder="Search">
+        <select v-model="sortBy">
+            <option value="name">A-Z</option>
+            <option value="ingredientCount">Ingredient Count</option>
+        </select>
+        <article v-for="recipe in sortedRecipes" :key="recipe.id">
+            <router-link :to="{ name: 'recipeDetails', params: { id: recipe.id } }">{{ recipe.name }}</router-link>
         </article>
     </section>
 </template>
 
 <script>
-import axios from 'axios';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     data() {
         return {
-            recipes: []
+            query: '',
+            sortBy: 'name'
         };
     },
-    mounted() {
-        axios.get('http://localhost:3000/').then(result => {
-            this.recipes = result.data;
-            console.log(result);
-        }, error => {
-            console.error(error);
-        });
-    }
+    created() {
+        this.debouncedGetFilteredRecipes = _.debounce(this.queryRecipes, 250);
+        this.fetchRecipes();
+    },
+    watch: {
+        query(newQuery, oldQuery) {
+            this.debouncedGetFilteredRecipes(newQuery);
+        }
+    },
+    computed: {
+        ...mapGetters(['allRecipes']),
+        sortedRecipes() {
+            return this.allRecipes.sort((a, b) => {
+                if (a[this.sortBy] < b[this.sortBy]) return -1;
+                if (a[this.sortBy] > b[this.sortBy]) return 1;
+                return 0;
+            });
+        }
+    },
+    methods: mapActions(['fetchRecipes', 'queryRecipes'])
 }
 </script>
 

@@ -1,17 +1,18 @@
 <template>
   <div id="app">
-    <Recipes></Recipes>
+    <keep-alive include="recipes">
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import Recipes from './components/Recipes.vue'
+import Recipes from './components/Recipes.vue';
+
 
 export default {
   name: 'app',
   components: {
-    HelloWorld,
     Recipes
   }
 }
