@@ -1,11 +1,20 @@
 import axios from 'axios';
 
 const state = {
-    recipes: []
+    recipes: [],
+    query: '',
+    sortBy: 'name'
 }
 
 const getters = {
-    allRecipes: state => state.recipes
+    allRecipes: state => state.recipes,
+    sortedRecipes: (state) => {
+        return [...state.recipes].sort((a, b) => {
+            if (a[state.sortBy] < b[state.sortBy]) return -1;
+            if (a[state.sortBy] > b[state.sortBy]) return 1;
+            return 0;
+        });
+    }
 };
 
 const actions = {
@@ -22,7 +31,9 @@ const actions = {
 };
 
 const mutations = {
-    setRecipes: (state, recipes) => state.recipes = recipes
+    setRecipes: (state, recipes) => state.recipes = recipes,
+    setQuery: (state, query) => state.query = query,
+    setSortBy: (state, sortBy) => state.sortBy = sortBy
 };
 
 export default {

@@ -8,7 +8,7 @@
         <article v-for="recipe in sortedRecipes" :key="recipe.id">
             <router-link :to="{ name: 'recipeDetails', params: { id: recipe.id } }">
                 <img :src="recipe.imageSrc" :alt="recipe.imageSrc">
-                <p>{{ recipe.name }}</p>
+                <h3>{{ recipe.name }}</h3>
             </router-link>
         </article>
     </section>
@@ -18,12 +18,6 @@
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-    data() {
-        return {
-            query: '',
-            sortBy: 'name'
-        };
-    },
     created() {
         this.debouncedGetFilteredRecipes = _.debounce(this.queryRecipes, 250);
         this.fetchRecipes();
@@ -34,13 +28,22 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['allRecipes']),
-        sortedRecipes() {
-            return this.allRecipes.sort((a, b) => {
-                if (a[this.sortBy] < b[this.sortBy]) return -1;
-                if (a[this.sortBy] > b[this.sortBy]) return 1;
-                return 0;
-            });
+        ...mapGetters(['allRecipes', 'sortedRecipes']),
+        query: {
+            get() {
+                return this.$store.state.recipes.query;
+            },
+            set(value) {
+                this.$store.commit('setQuery', value);
+            }
+        },
+        sortBy: {
+            get() {
+                return this.$store.state.recipes.sortBy;
+            },
+            set(value) {
+                this.$store.commit('setSortBy', value);
+            }
         }
     },
     methods: mapActions(['fetchRecipes', 'queryRecipes'])
@@ -48,5 +51,8 @@ export default {
 </script>
 
 <style scoped>
-
+    h1, h2, h3, h4, h5 {
+        text-transform: uppercase;
+        font-weight: 400;
+    }
 </style>
