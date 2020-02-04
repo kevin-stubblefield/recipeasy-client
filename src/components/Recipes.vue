@@ -6,7 +6,10 @@
             <option value="ingredientCount">Ingredient Count</option>
         </select>
         <article v-for="recipe in sortedRecipes" :key="recipe.id">
-            <router-link :to="{ name: 'recipeDetails', params: { id: recipe.id } }">{{ recipe.name }}</router-link>
+            <router-link :to="{ name: 'recipeDetails', params: { id: recipe.id } }">
+                <img :src="recipe.imageSrc" :alt="recipe.imageSrc">
+                <p>{{ recipe.name }}</p>
+            </router-link>
         </article>
     </section>
 </template>
