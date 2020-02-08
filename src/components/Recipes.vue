@@ -6,7 +6,7 @@
             <option value="ingredientCount">Ingredient Count</option>
         </select>
         <article v-for="recipe in sortedRecipes" :key="recipe.id">
-            <router-link :to="{ name: 'recipeDetails', params: { id: recipe.id } }">
+            <router-link :to="{ name: 'recipeDetails', params: { slug: recipe.slug } }">
                 <img :src="recipe.imageSrc" :alt="recipe.imageSrc">
                 <h3>{{ recipe.name }}</h3>
             </router-link>
@@ -20,7 +20,11 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
     created() {
         this.debouncedGetFilteredRecipes = _.debounce(this.queryRecipes, 250);
-        this.fetchRecipes();
+        if (this.getQuery()) {
+            this.queryRecipes(this.getQuery());
+        } else {
+            this.fetchRecipes();
+        }
     },
     watch: {
         query(newQuery, oldQuery) {
@@ -28,7 +32,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['allRecipes', 'sortedRecipes']),
+        ...mapGetters(['allRecipes', 'sortedRecipes', 'getQuery']),
         query: {
             get() {
                 return this.$store.state.recipes.query;

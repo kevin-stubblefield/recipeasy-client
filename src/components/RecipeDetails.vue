@@ -57,7 +57,7 @@ export default {
         };
     },
     mounted() {
-        axios.get(`http://localhost:3000/${this.$route.params.id}`).then(result => {
+        axios.get(`http://localhost:3000/${this.$route.params.slug}`).then(result => {
             this.recipe = result.data;
         }, error => {
             console.error(error);
