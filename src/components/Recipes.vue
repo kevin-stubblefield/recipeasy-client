@@ -1,16 +1,18 @@
 <template>
-    <section id="recipes">
+    <section id="container">
         <input type="text" v-model="query" placeholder="Search">
         <select v-model="sortBy">
             <option value="name">A-Z</option>
             <option value="ingredientCount">Ingredient Count</option>
         </select>
-        <article v-for="recipe in sortedRecipes" :key="recipe.id">
-            <router-link :to="{ name: 'recipeDetails', params: { slug: recipe.slug } }">
-                <img :src="recipe.imageSrc" :alt="recipe.imageSrc">
-                <h3>{{ recipe.name }}</h3>
-            </router-link>
-        </article>
+        <section class="recipes">
+            <article class="recipe" v-for="recipe in sortedRecipes" :key="recipe.id">
+                <router-link :to="{ name: 'recipeDetails', params: { slug: recipe.slug } }">
+                    <img :src="recipe.imageSrc" :alt="recipe.imageSrc">
+                    <h4>{{ recipe.name }}</h4>
+                </router-link>
+            </article>
+        </section>
     </section>
 </template>
 
@@ -20,8 +22,8 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
     created() {
         this.debouncedGetFilteredRecipes = _.debounce(this.queryRecipes, 250);
-        if (this.getQuery()) {
-            this.queryRecipes(this.getQuery());
+        if (this.query) {
+            this.queryRecipes(this.query);
         } else {
             this.fetchRecipes();
         }
@@ -32,7 +34,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['allRecipes', 'sortedRecipes', 'getQuery']),
+        ...mapGetters(['allRecipes', 'sortedRecipes', 'query']),
         query: {
             get() {
                 return this.$store.state.recipes.query;
@@ -58,5 +60,21 @@ export default {
     h1, h2, h3, h4, h5 {
         text-transform: uppercase;
         font-weight: 400;
+        margin-top: 0;
+    }
+
+    img {
+        width: 250px;
+        margin-bottom: 0;
+    }
+
+    .recipes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .recipe {
+        width: 250px;
     }
 </style>

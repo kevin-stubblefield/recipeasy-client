@@ -7,7 +7,7 @@ const state = {
 }
 
 const getters = {
-    getQuery: state => state.query,
+    query: state => state.query,
     allRecipes: state => state.recipes,
     sortedRecipes: (state) => {
         return [...state.recipes].sort((a, b) => {
