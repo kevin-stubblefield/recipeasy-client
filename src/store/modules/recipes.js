@@ -20,7 +20,7 @@ const getters = {
 
 const actions = {
     async fetchRecipes({ commit }) {
-        const response = await axios.get('http://localhost:3000/');
+        const response = await axios.get('https://localhost:3000/');
 
         commit('setRecipes', response.data)
     },
